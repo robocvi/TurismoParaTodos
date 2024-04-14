@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from openai import OpenAI
 from fastapi.middleware.cors import CORSMiddleware
 from src.requests import TextToSpeechRequest, SpeechToTextRequest, ChatBotRequest
-from src.controllers import TextToSpeechController, SpeechToTextController, ChatbotController
+from src.controllers import TextToSpeechController, SpeechToTextController, ChatbotController, AttrationController
 from src.settings import OPENAI_API_KEY
 
 app = FastAPI()
@@ -22,6 +22,10 @@ app.add_middleware(
 async def read_root():
     return {"message": "Welcome to TurismoParaTodos API!"}
 
+@app.get("/attractions", tags=["Atrattions"]) 
+async def attractions():
+    return AttrationController.all_attrations()
+
 @app.post("/text_to_speech", tags=["TextSpeech"]) 
 async def text_to_speech(request: TextToSpeechRequest):
     text = request.text
@@ -32,7 +36,7 @@ async def speech_to_text(request: SpeechToTextRequest):
     url = request.url
     return SpeechToTextController.speech_to_text(url)
 
-@app.post("/chatbot", tags=["TextSpeech"]) 
+@app.post("/chatbot", tags=["Chatbot"]) 
 async def chatbot(request: ChatBotRequest):
     prompt = request.prompt
     client_tag = request.client_tag
